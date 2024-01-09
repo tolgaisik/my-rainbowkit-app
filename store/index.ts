@@ -7,7 +7,7 @@ interface InfiniteListStore<T> {
 	hasMore: boolean;
 	page: number;
   filterOptions: any;
-	loadItems: (searchParams: any, chainId: number) => Promise<void>;
+	_loadItems: (searchParams: any, chainId: number) => Promise<void>;
 	fetchMore: (searchParams: any, chainId: number) => Promise<void>;
   updateItem: (id: keyof T, item: T) => void;
   loadOnMount: (searchParams: any, chainId: number) => void;
@@ -26,9 +26,9 @@ export const createInfiniteListStore = <StoreItem>(
     loadOnMount: (searchParams: any, chainId: number) => {
       set({ filterOptions: searchParams });
       set({ items: [], ids: [], page: 1, hasMore: true });
-      get().loadItems(searchParams, chainId);
+      get()._loadItems(searchParams, chainId);
     },
-		loadItems: async (searchParams: any, chainId: number) => {
+		_loadItems: async (searchParams: any, chainId: number) => {
 			const items = await fetcher(searchParams, chainId, 1);
 			if (items.length === 0) {
 				set({ hasMore: false });
